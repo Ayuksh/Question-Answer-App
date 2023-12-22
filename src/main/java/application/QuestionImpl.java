@@ -1,9 +1,8 @@
 package application;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class QuestionImpl implements QuestionService{
 
@@ -50,5 +49,32 @@ public class QuestionImpl implements QuestionService{
             System.err.println("INVALID QUESTION ID ");
         }
         return 0;
+    }
+
+    @Override
+    public List<Question> getAllQuestions() {
+        String selectQuery= "select * from question_info" ;
+        List<Question> questionList = new ArrayList<>();
+        try {
+            Statement stmt = conn.createStatement() ;
+           ResultSet rs = stmt.executeQuery(selectQuery);
+           while (rs.next()){
+               Question q = new Question();
+               q.setQuestionId(rs.getInt(1));
+               q.setQuestion( rs.getString(2));
+               q.setOption1( rs.getString(3));
+               q.setOption2( rs.getString(4));
+               q.setOption3( rs.getString(5));
+               q.setAnswer(rs.getString(6));
+
+               questionList.add(q);
+           }
+        } catch (SQLException e) {
+
+        }
+
+        return questionList ;
+
+
     }
 }

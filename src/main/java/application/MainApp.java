@@ -1,5 +1,6 @@
 package application;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class MainApp {
@@ -12,8 +13,18 @@ public class MainApp {
         System.out.println("1. ADD QUESTION ");
         System.out.println("2. REMOVE QUESTION ");
         System.out.println("3. UPDATED QUESTION");
-        System.out.println("4. exit ");
+        System.out.println("4. DISPLAY ALL QUESTIONS");
+        System.out.println("5. TAKE TEST ");
+        System.out.println("6. exit ");
         int ch = sc.nextInt() ;
+
+        if (ch <5)
+        {
+            System.out.println("ENTER PASSWORD ");
+            String pass = sc.next();
+            if (!pass.equals("tiger"))
+                System.exit(0);
+        }
 
         switch (ch)
         {
@@ -27,6 +38,11 @@ public class MainApp {
                 updateQuestion();
                 break;
             case 4:
+                displayAllQuestion();
+                break;
+            case 5:
+                takeTest();
+            case 6:
                 System.exit(0);
                 break;
             default:
@@ -34,6 +50,47 @@ public class MainApp {
         }
 
        main(args);
+    }
+
+    private static void takeTest() {
+        List<Question> questionList = service.getAllQuestions();
+        int marks = 0 ;
+
+        System.out.println("READY FOR TEST ");
+        String ans = sc.nextLine();
+        for (Question q : questionList)
+        {
+            System.out.println("Q"+ q.getQuestionId()+". "+q.getQuestion() );
+            System.out.println("1. "+ q.getOption1());
+            System.out.println("2. "+ q.getOption2());
+            System.out.println("3. "+ q.getOption3());
+            System.out.println("ENTER YOUR ANS ");
+            ans = sc.nextLine();
+            String actualAns = q.getAnswer();
+            if (ans.equals(actualAns))
+                marks+=5 ;
+            else
+                marks-=2 ;
+        }
+        System.out.println("\n\n\n\n-----------------------------------");
+        System.out.println(" UR TOTAL MARKS ARE : "+ marks);
+        System.out.println("-----------------------------------");
+        System.exit(0);
+
+    }
+
+    private static void displayAllQuestion() {
+        List<Question> questionList = service.getAllQuestions();
+        for (Question q : questionList){
+            System.out.println("Q"+ q.getQuestionId()+". "+q.getQuestion() );
+            System.out.println("1. "+ q.getOption1());
+            System.out.println("2. "+ q.getOption2());
+            System.out.println("3. "+ q.getOption3());
+            System.out.println("-----> "+ q.getAnswer());
+            System.out.println("\n-------------------------------------\n");
+        }
+
+
     }
 
     public static void addQuestion()
@@ -74,7 +131,7 @@ public class MainApp {
     public static void updateQuestion(){
         System.out.println("1. MODIFY QUESTION ");
         System.out.println("2. MODIFY OPTIONS ");
-        System.out.println("3. exit ");
+        System.out.println("3. <- back ");
         int ch = sc.nextInt();
         switch (ch){
             case 1:
